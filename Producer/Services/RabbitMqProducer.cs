@@ -1,5 +1,7 @@
-﻿using RabbitMQ.Client;
+﻿using Core;
+using RabbitMQ.Client;
 using System.Text;
+using System.Text.Json;
 
 namespace Producer.Services
 {
@@ -33,7 +35,7 @@ namespace Producer.Services
             );
         }
 
-        public void SendMessage(string message)
+        public void SendDefaultMessage(string message)
         {
             var body = Encoding.UTF8.GetBytes(message);
 
@@ -45,6 +47,21 @@ namespace Producer.Services
             );
 
             _logger.LogInformation("Mensagem enviada ao RabbitMQ: {Message}", message);
+        }
+
+        public void SendOrder(Order order)
+        {
+            var json = JsonSerializer.Serialize(order);
+            var body = Encoding.UTF8.GetBytes(json);
+
+            _channel.BasicPublish(
+                exchange: "",
+                routingKey: _queueName,
+                basicProperties: null,
+                body: body
+            );
+
+            _logger.LogInformation("Ordem enviada: {Order}", json);
         }
 
         public void Dispose()

@@ -1,7 +1,10 @@
-﻿namespace Producer.Services
+﻿using Core;
+
+namespace Producer.Services
 {
     public interface IRabbitMqProducer
     {
-        void SendMessage(string message);
+        void SendDefaultMessage(string message);
+        void SendOrder(Order order);
     }
 }

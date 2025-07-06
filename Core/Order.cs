@@ -12,6 +12,8 @@ namespace Core
         public User User { get; set; }
         public DateTime CreatedAt { get; set; }
 
+        public Order() { }
+
         public Order(int id, User user)
         {
             Id = id;
